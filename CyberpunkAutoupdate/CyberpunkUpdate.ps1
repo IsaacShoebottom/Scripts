@@ -1,5 +1,51 @@
-# Store manifest variable
-$Manifest = "H:\Games\Steam\steamapps\appmanifest_1091500.acf"
+# function that takes in an app id as a number and returns the path to the steam library folder that contains the app id
+function parseVDFforPath([int]$appId) {
+	# Steam library folders vdf absolute path
+	$steamLibraryFoldersVDF = "C:\Program Files (x86)\Steam\steamapps\libraryfolders.vdf"
+
+	# convert the app id to a string
+	$appIdString = $appId.ToString()
+
+	# Get the contents of the vdf file
+	$steamLibraryFoldersVDFContents = Get-Content $steamLibraryFoldersVDF
+
+	# loop through each line of the vdf file
+	foreach ($line in $steamLibraryFoldersVDFContents) {
+		# if the line contains the app id
+		if ($line.Contains($appIdString)) {
+			# Take not of the line number
+			$lineNumber = $steamLibraryFoldersVDFContents.IndexOf($line)
+
+			# Get the line that contains the path, which you need to iterate backwards through the file, finding the first line that starts with "path"
+			for ($i = $lineNumber; $i -gt 0; $i--) {
+				# if the line starts with "path"
+				if ($steamLibraryFoldersVDFContents[$i].contains("path")) {
+					# take note of the line number
+					$pathLineNumber = $i
+
+					# get the line that contains the path
+					$pathLine = $steamLibraryFoldersVDFContents[$pathLineNumber]
+
+					# split the line by the quotation marks
+					$pathLineSplit = $pathLine.Split('"')
+
+					# the path is the 4th item in the array, because the keys are separated by quotation marks, and the values are separated by quotation marks
+					$path = $pathLineSplit[3]
+
+					# replace all the double backslashes with single backslashes, looks weird because each backslash needs to be escaped
+					$path = $path.Replace("\\\\", "\\")
+
+					# add on the actual manifest file name
+					$path = $path + "\steamapps\appmanifest_" + $appIdString + ".acf"
+
+					# return the path
+					return $path
+				}
+			}
+		}
+	}
+}
+$Manifest = parseVDFforPath(1091500)
 
 # Get the read only attribute
 $ReadOnly = (Get-Item $Manifest).IsReadOnly
