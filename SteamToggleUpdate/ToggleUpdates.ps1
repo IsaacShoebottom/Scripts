@@ -45,16 +45,20 @@ function parseVDFforPath([int]$appId) {
 		}
 	}
 }
-$Manifest = parseVDFforPath(1091500)
 
-# Get the read only attribute
-$ReadOnly = (Get-Item $Manifest).IsReadOnly
+# function that changes the read only attribute of the manifest file
+function toggleUpdate($Manifest) {
+	# Get the read only attribute
+	$ReadOnly = (Get-Item $Manifest).IsReadOnly
 
-# If the file is read only, remove the read only attribute, If the file is not read only, set the read only attribute
-If ($ReadOnly) {Set-ItemProperty $Manifest -Name IsReadOnly -Value $false} Else {Set-ItemProperty $Manifest -Name IsReadOnly -Value $true}
+	# If the file is read only, remove the read only attribute, If the file is not read only, set the read only attribute
+	If ($ReadOnly) { Set-ItemProperty $Manifest -Name IsReadOnly -Value $false } Else { Set-ItemProperty $Manifest -Name IsReadOnly -Value $true }
 
-# Display the read only attribute for reference
-Write-Host "Manifest file's read only attribute is now $((Get-Item $Manifest).IsReadOnly)"
+	# Display the read only attribute for reference
+	Write-Host "Manifest file's read only attribute is now $((Get-Item $Manifest).IsReadOnly)"
 
-# Pause the script to see the output
-Read-Host -Prompt "Press Enter to exit"
+	# Pause the script to see the output
+	Read-Host -Prompt "Press Enter to exit"
+}
+
+toggleUpdate(parseVDFforPath($args[0]))
