@@ -6,11 +6,15 @@ If (Test-Path -Path ".\ToggleUpdates.ps1" -PathType Leaf) {
 	.\ToggleUpdates.ps1 $appId
 }
 Else {
+	# construct temp path
+	$env:temp = [System.IO.Path]::GetTempPath()
+	$tempPath = $env:temp + "\ToggleUpdates.ps1"
+
 	# Download the network script
 	$wc = New-Object System.Net.WebClient
-	$wc.DownloadFile($networkLocation, ".\ToggleUpdates.ps1")
+	$wc.DownloadFile($networkLocation, $tempPath)
 	# Invoke the network script
-	.\ToggleUpdates.ps1 $appId
+	&$tempPath $appId
 	# Delete the network script
-	Remove-Item -Path ".\ToggleUpdates.ps1"
+	Remove-Item -Path $tempPath
 }
