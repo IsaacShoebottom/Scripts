@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "hq2cd-conv"
+version = "0.1.0"
+description = ""
+authors = ["Isaac Shoebottom <ir.shoebottom@gmail.com>"]
+readme = "README.md"
+packages = [{include = "hq2cd_conv"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+ffprobe-python = "^1.0.3"
+ffmpeg-python = "^0.2.0"
+numba = "^0.57.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
