@@ -234,7 +234,7 @@ function logSwap(artist, album) {
 }
 
 function log(message: string): void {
-	console.log("PlexMusicFixer" + message)
+	console.log("PlexMusicFixer: " + message)
 }
 
 // "Main"
