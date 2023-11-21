@@ -1,0 +1,4 @@
+Need to normalize file names on server, no stupid "’" and "'" shenanigans
+https://apps.timwhitlock.info/unicode/inspect?s=%E2%80%99%27
+
+either that or get child item to not print out something different than what is actually there
