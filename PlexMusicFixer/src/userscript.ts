@@ -22,7 +22,6 @@ let decidedIntervalIds: number[] = []
 
 /**
  * Checks if the current page is a music page
- * @returns {boolean} True if the current page is a music page, false otherwise
  */
 function isMusicPage(): boolean {
 	// Find the current library name
@@ -40,7 +39,6 @@ function isMusicPage(): boolean {
 
 /**
  * Decides what page we're on, and runs the appropriate function
- * @returns {void}
  */
 function decidePage(): void {
 	// Clear all intervals
@@ -106,6 +104,9 @@ function swapCards(cards): void {
 	}
 }
 
+/**
+ * Logic for library pages
+ */
 function libraryPage() {
 	// Select all divs with the attribute data-testid="cellItem"
 	let cards = document.querySelectorAll("[data-testid=\"cellItem\"]")
@@ -116,6 +117,9 @@ function libraryPage() {
 	swapCards(cards)
 }
 
+/**
+ * Logic for album pages
+ */
 function albumPage() {
 	let metadata = document.querySelectorAll("[data-testid=\"metadata-top-level-items\"]")
 	// Two divs down from metadata is the container for the artist and album
