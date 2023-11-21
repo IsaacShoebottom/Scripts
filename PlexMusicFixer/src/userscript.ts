@@ -11,16 +11,20 @@
 
 "use strict"
 
-let musicLibraryNames = [
+let musicLibraryNames: string[] = [
 	"Music",
 ]
 // How often should scripts run, in milliseconds
 let interval = 1e2
 // Keep track of all intervals
-let intervalIds = []
-let decidedIntervalIds = []
+let intervalIds: number[] = []
+let decidedIntervalIds: number[] = []
 
-function isMusicPage() {
+/**
+ * Checks if the current page is a music page
+ * @returns {boolean} True if the current page is a music page, false otherwise
+ */
+function isMusicPage(): boolean {
 	// Find the current library name
 	// Library title has the class selector "PageHeaderTitle-title"
 	let nodes = document.querySelectorAll("[class*=\"PageHeaderTitle-title\"]")
@@ -30,15 +34,23 @@ function isMusicPage() {
 		return false
 	}
 
-	let libraryName = nodes.item(0).innerText
+	let libraryName = nodes.item(0).innerHTML
 	return musicLibraryNames.includes(libraryName)
 }
 
-function decidePage() {
+/**
+ * Decides what page we're on, and runs the appropriate function
+ * @returns {void}
+ */
+function decidePage(): void {
 	// Clear all intervals
 	for (let id of intervalIds) {
 		clearInterval(id)
 	}
+
+	// Always check, so these need to be extra safe
+	let id = setInterval(alwaysCheck, interval)
+	intervalIds.push(id)
 
 	if (!isMusicPage()) {
 		console.log("Not music page")
@@ -55,23 +67,25 @@ function decidePage() {
 		let id = setInterval(albumPage, interval)
 		intervalIds.push(id)
 	}
-	let id = setInterval(alwaysCheck, interval)
-	intervalIds.push(id)
+
 
 	for (let id of decidedIntervalIds) {
 		clearInterval(id)
 	}
 }
 
-function swapCards(cards) {
+/**
+ * Swaps the artist and album in each card
+ */
+function swapCards(cards): void {
 	// For each card, get all html elements, and swap the second and third elements
 	for (let card of cards) {
 		// Check if the card has already been swapped
-		if (card.swap) {
+		if (card.attributes.swap) {
 			continue
 		}
 
-		let elements = card.childNodes
+		let elements = card.children
 		let artist = elements.item(1)
 		let album = elements.item(2)
 		card.insertBefore(album, artist)
@@ -88,7 +102,7 @@ function swapCards(cards) {
 		artist.classList.add(secondaryClass)
 
 		// Add a swap property to the card, so we can check if it's already been swapped
-		card.swap = true
+		card.attributes.swap = true
 	}
 }
 
@@ -105,18 +119,18 @@ function libraryPage() {
 function albumPage() {
 	let metadata = document.querySelectorAll("[data-testid=\"metadata-top-level-items\"]")
 	// Two divs down from metadata is the container for the artist and album
-	let container = metadata.item(0).childNodes.item(0).childNodes.item(0)
-	if (container.swap) {
+	let container: any = metadata.item(0).children.item(0).children.item(0)
+	if (container.attributes.swap) {
 		return
 	}
 
 	// Check if the container has two children, so there isn't null errors
-	if (container.childNodes.length < 2) {
+	if (container.children.length < 2) {
 		console.log("Not on album page")
 		return
 	}
-	let artist = container.childNodes.item(0)
-	let album = container.childNodes.item(1)
+	let artist = container.children.item(0)
+	let album = container.children.item(1)
 	// Check if the artist and album are what we're looking for, so we don't swap the wrong elements
 	if (
 		artist.attributes.getNamedItem("data-testid").value !== "metadata-title" ||
@@ -146,7 +160,8 @@ function albumPage() {
 	artist.replaceWith(newArtist)
 	album.replaceWith(newAlbum)
 
-	container.swap = true
+	// Add a swap property to the container, so we can check if it's already been swapped
+	container.attributes.swap = true
 }
 
 function alwaysCheck() {
@@ -154,41 +169,50 @@ function alwaysCheck() {
 	playerCheck()
 }
 
+/**
+ * Checks if the current page is a soundtrack element, and swaps the artist and album if it is
+ */
 function soundtrackCheck() {
 	// Select for elements with the title="Soundtracks" attribute
 	let soundtracks = document.querySelectorAll("[title=\"Soundtracks\"]")
 	if (soundtracks.length !== 0) {
 		// Get holder of soundtrack cards
-		let root = soundtracks.item(0).parentNode.parentNode.parentNode
+		let root = soundtracks.item(0).parentElement.parentElement.parentElement
 		let cardHolder = root.lastElementChild.lastElementChild.lastElementChild
-		swapCards(cardHolder.childNodes)
+		swapCards(cardHolder.children)
 	}
 }
 
+/**
+ * Checks for a few elements that could be present, and swaps the artist and album if they are
+ */
 function playerCheck() {
 	// Mini player
 	let player = document.querySelectorAll("[class*=\"PlayerControlsMetadata-container\"]")
 	if (player.length !== 0) {
 		let playerMetadata = player.item(0)
-		let holder = playerMetadata.childNodes.item(1)
+		let holder = playerMetadata.children.item(1)
 		swapPlayer(holder)
 	}
 	// Big player
 	let bigPlayer = document.querySelectorAll("[class*=\"AudioVideoFullMusic-titlesContainer\"]")
 	if (bigPlayer.length !== 0) {
 		let playerMetadata = bigPlayer.item(0)
-		let holder = playerMetadata.childNodes.item(1)
+		let holder = playerMetadata.children.item(1)
 		swapPlayer(holder)
 	}
 }
 
+/**
+ * Swaps the artist and album in the player
+ */
 function swapPlayer(holder) {
-	if (holder.swap) {
+	if (holder.attributes.swap) {
 		return
 	}
-	let artist = holder.childNodes.item(0)
-	let dash = holder.childNodes.item(1)
-	let album = holder.childNodes.item(2)
+	let artist = holder.children.item(0)
+	let dash = holder.children.item(1)
+	let album = holder.children.item(2)
 	// Swap artist and album
 	// Remove all children
 	holder.removeChild(artist)
@@ -198,7 +222,7 @@ function swapPlayer(holder) {
 	holder.appendChild(album)
 	holder.appendChild(dash)
 	holder.appendChild(artist)
-	holder.swap = true
+	holder.attributes.swap = true
 }
 
 // "Main"
