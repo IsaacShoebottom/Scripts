@@ -88,8 +88,6 @@ function swapCards(cards): void {
 		let album = elements.item(2)
 		card.insertBefore(album, artist)
 
-		log("Swapped artist: " + artist.innerText + " and album: " + album.innerText)
-
 		// Album has isSecondary
 		let secondaryClass = album.className.split(" ").find((className) => className.includes("isSecondary"))
 
@@ -101,6 +99,8 @@ function swapCards(cards): void {
 
 		// Add a swap property to the card, so we can check if it's already been swapped
 		card.attributes.swap = true
+
+		logSwap(artist.innerText, album.innerText)
 	}
 }
 
@@ -145,7 +145,6 @@ function albumPage() {
 	}
 
 	container.insertBefore(album, artist)
-	log("Swapped artist: " + artist.innerText + " and album: " + album.innerText)
 
 	let newArtist = document.createElement("h2")
 	let newAlbum = document.createElement("h1")
@@ -166,6 +165,8 @@ function albumPage() {
 
 	// Add a swap property to the container, so we can check if it's already been swapped
 	container.attributes.swap = true
+
+	logSwap(artist.innerHTML, album.innerHTML)
 }
 
 function alwaysCheck() {
