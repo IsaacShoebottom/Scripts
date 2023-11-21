@@ -166,7 +166,7 @@ function albumPage() {
 	// Add a swap property to the container, so we can check if it's already been swapped
 	container.attributes.swap = true
 
-	logSwap(artist.innerHTML, album.innerHTML)
+	logSwap(artist.innerText, album.innerText)
 }
 
 function alwaysCheck() {
