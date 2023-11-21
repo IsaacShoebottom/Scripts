@@ -1,0 +1,3 @@
+- Improve typescript support
+- https://stackoverflow.com/questions/11286661/set-custom-attribute-using-javascript
+
