@@ -30,7 +30,7 @@ function isMusicPage(): boolean {
 	let nodes = document.querySelectorAll("[class*=\"PageHeaderTitle-title\"]")
 
 	if (nodes.length === 0) {
-		console.log("No library name found")
+		log("No library name found")
 		return false
 	}
 
@@ -53,17 +53,17 @@ function decidePage(): void {
 	intervalIds.push(id)
 
 	if (!isMusicPage()) {
-		console.log("Not music page")
+		log("Not music page")
 		return
 	}
 
 	let url = window.location.href
 	if (url.includes("com.plexapp.plugins.library")) {
-		console.log("Library page")
+		log("Library page")
 		let id = setInterval(libraryPage, interval)
 		intervalIds.push(id)
 	} else if (url.includes("details?key=%2Flibrary%2Fmetadata")) {
-		console.log("Details page")
+		log("Details page")
 		let id = setInterval(albumPage, interval)
 		intervalIds.push(id)
 	}
@@ -90,7 +90,7 @@ function swapCards(cards): void {
 		let album = elements.item(2)
 		card.insertBefore(album, artist)
 
-		console.log("Swapped artist: " + artist.innerText + " and album: " + album.innerText)
+		log("Swapped artist: " + artist.innerText + " and album: " + album.innerText)
 
 		// Album has isSecondary
 		let secondaryClass = album.className.split(" ").find((className) => className.includes("isSecondary"))
@@ -110,7 +110,7 @@ function libraryPage() {
 	// Select all divs with the attribute data-testid="cellItem"
 	let cards = document.querySelectorAll("[data-testid=\"cellItem\"]")
 	if (cards.length === 0) {
-		console.log("No cards found")
+		log("No cards found")
 		return
 	}
 	swapCards(cards)
@@ -126,7 +126,7 @@ function albumPage() {
 
 	// Check if the container has two children, so there isn't null errors
 	if (container.children.length < 2) {
-		console.log("Not on album page")
+		log("Not on album page")
 		return
 	}
 	let artist = container.children.item(0)
@@ -136,12 +136,12 @@ function albumPage() {
 		artist.attributes.getNamedItem("data-testid").value !== "metadata-title" ||
 		album.attributes.getNamedItem("data-testid").value !== "metadata-subtitle"
 	) {
-		console.log("Not on album page")
+		log("Not on album page")
 		return
 	}
 
 	container.insertBefore(album, artist)
-	console.log("Swapped artist: " + artist.innerText + " and album: " + album.innerText)
+	log("Swapped artist: " + artist.innerText + " and album: " + album.innerText)
 
 	let newArtist = document.createElement("h2")
 	let newAlbum = document.createElement("h1")
@@ -225,13 +225,21 @@ function swapPlayer(holder) {
 	holder.attributes.swap = true
 }
 
+function logSwap(artist, album) {
+	log("Swapped artist: " + artist + " and album: " + album)
+}
+
+function log(message: string): void {
+	console.log("PlexMusicFixer" + message)
+}
+
 // "Main"
 // On href change, run decidePage
 let href = ""
 const observer = new MutationObserver(() => {
 	if (window.location.href !== href) {
 		href = window.location.href
-		console.log("Deciding page")
+		log("Deciding page")
 		decidedIntervalIds.push(setInterval(decidePage, interval))
 	}
 })
