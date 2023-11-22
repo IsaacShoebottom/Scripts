@@ -1,3 +1,3 @@
 - Improve typescript support
+- Need to make the album swap only trigger when the album dropdown is selected
 - https://stackoverflow.com/questions/11286661/set-custom-attribute-using-javascript
-
