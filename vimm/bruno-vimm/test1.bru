@@ -1,0 +1,32 @@
+meta {
+  name: test1
+  type: http
+  seq: 1
+}
+
+get {
+  url: https://download2.vimm.net/download/?mediaId=9709&alt=1
+  body: none
+  auth: none
+}
+
+query {
+  mediaId: 9709
+  alt: 1
+}
+
+headers {
+  Referer: https://vimm.net/
+  User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/115.0
+  ~Accept-Encoding: gzip, deflate, br
+  ~Connection: keep-alive
+  ~Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/jxl,image/webp,*/*;q=0.8
+  ~Accept-Language: en,en-CA;q=0.7,en-US;q=0.3
+  ~DNT: 1
+  ~Sec-GPC: 1
+  ~Upgrade-Insecure-Requests: 1
+  ~Sec-Fetch-Dest: document
+  ~Sec-Fetch-Mode: navigate
+  ~Sec-Fetch-Site: same-site
+  ~Sec-Fetch-User: ?1
+}
