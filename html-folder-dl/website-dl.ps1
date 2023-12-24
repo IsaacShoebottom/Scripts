@@ -1,0 +1,1 @@
+wget -r -nd -np $args[0]
