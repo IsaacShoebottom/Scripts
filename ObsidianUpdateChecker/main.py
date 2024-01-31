@@ -20,7 +20,7 @@ INSTALLED_VERSION = ""
 with urllib.request.urlopen(API_URL) as url:
     data = json.loads(url.read().decode())
     assets = data["assets"]
-    for asset in assets
+    for asset in assets:
         if asset["name"].endswith(".deb"):
             DEB_NAME = asset["name"]
             DEB_URL = asset["browser_download_url"]
