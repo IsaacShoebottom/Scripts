@@ -1,0 +1,10 @@
+#!/bin/env -S java --source 11
+
+class Main {
+  public static void main(String args[]) {
+    System.out.println("HelloWorld!");
+
+    // Print the sum of 1 and 2
+    System.out.println(1 + 2);
+    }
+} 
