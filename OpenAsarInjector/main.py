@@ -92,7 +92,9 @@ def sanity_check():
         print("Would you like to clear backups? (y/n)")
         answer = input().lower()
         if answer == "y":
-            os.remove(RESOURCES_PATH + ASAR_BACKUP)
+            if os.path.isfile(RESOURCES_PATH + ASAR_BACKUP):
+                os.remove(RESOURCES_PATH + ASAR_BACKUP)
+                print("Backup cleared, installation will continue as normal")
             print("Backups cleared, installation will continue as normal")
         else:
             print("Backups not cleared, please clean manually")
