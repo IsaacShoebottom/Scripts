@@ -26,7 +26,7 @@ if (Test-Path $location) {
 	Write-Host $newPipConfig
 
 	# Write the new content to the file
-	$newPipConfig | Out-File $location -Force
+	$newPipConfig | Out-File $location -Force -Encoding utf8
 } else {
 	# If it doesn't exist, create it
 	New-Item -Path $location -ItemType File
