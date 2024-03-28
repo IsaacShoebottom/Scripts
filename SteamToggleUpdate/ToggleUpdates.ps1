@@ -1,7 +1,12 @@
 # function that takes in an app id as a number and returns the path to the steam library folder that contains the app id
 function parseVDFforPath([int]$appId) {
+	# Steam libary folder vdf if using scoop
+	$scoopVDF = "$env:USERPROFILE\scoop\apps\steam\current\steamapps\libraryfolders.vdf"
 	# Steam library folders vdf absolute path
-	$steamLibraryFoldersVDF = "C:\Program Files (x86)\Steam\steamapps\libraryfolders.vdf"
+	$normalVDF = "C:\Program Files (x86)\Steam\steamapps\libraryfolders.vdf"
+
+	# Set the path to the vdf file based on whether you are using scoop or not
+	$steamLibraryFoldersVDF = if (Test-Path $scoopVDF) { $scoopVDF } else { $normalVDF }
 
 	# convert the app id to a string
 	$appIdString = $appId.ToString()
