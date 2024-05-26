@@ -1,7 +1,7 @@
 # Get each folder in the current directory
 $folders = Get-ChildItem -Directory
 
-# Array of arrays to store work queue
+# Array to store the folders that need to be renamed
 $work = @()
 
 foreach ($folder in $folders) {
@@ -17,7 +17,9 @@ foreach ($folder in $folders) {
             $new_name = $matches[1]
             $new_name = $new_name + $matches[2]
         }
-        $toadd = @($folder.FullName, $new_name)
+        $toadd = New-Object PSObject
+        $toadd | Add-Member -MemberType NoteProperty -Name path -Value $folder.FullName
+        $toadd | Add-Member -MemberType NoteProperty -Name newname -Value $new_name
         $work += $toadd
 
         Write-Host "Rename $folder to $new_name"
@@ -35,7 +37,9 @@ foreach ($folder in $folders) {
             $new_name = $matches[1]
             $new_name = $new_name + $matches[2]
         }
-        $toadd = @($folder.FullName, $new_name)
+        $toadd = New-Object PSObject
+        $toadd | Add-Member -MemberType NoteProperty -Name path -Value $folder.FullName
+        $toadd | Add-Member -MemberType NoteProperty -Name newname -Value $new_name
         $work += $toadd
 
         Write-Host "Rename $folder to $new_name"
@@ -53,7 +57,9 @@ foreach ($folder in $folders) {
             $new_name = $matches[1]
             $new_name = $new_name + $matches[2]
         }
-        $toadd = @($folder.FullName, $new_name)
+        $toadd = New-Object PSObject
+        $toadd | Add-Member -MemberType NoteProperty -Name path -Value $folder.FullName
+        $toadd | Add-Member -MemberType NoteProperty -Name newname -Value $new_name
         $work += $toadd
 
         Write-Host "Rename $folder to $new_name"
@@ -62,5 +68,5 @@ foreach ($folder in $folders) {
 }
 Read-Host -Prompt "Press Enter to continue"
 foreach ($item in $work) {
-    Rename-Item -Path $item[0] -NewName $item[1]
+    Rename-Item -Path $item.path -NewName $item.newname
 }
